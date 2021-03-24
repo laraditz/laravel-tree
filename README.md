@@ -15,9 +15,10 @@ You can install the package via composer:
 composer require laraditz/laravel-tree
 ```
 
-## Usage
+## Configuration
 
 Add the tree columns to your table by adding `addLaravelTreeColumns` to your database migration file.
+For example, we add the tree columns to the `trees` table as shown below.
 ``` php
  Schema::create('trees', function (Blueprint $table) {
     ...
@@ -26,7 +27,7 @@ Add the tree columns to your table by adding `addLaravelTreeColumns` to your dat
 });
 ```
 
-Add the `TreeNodeTrait` to the model.
+Then, add the `TreeNodeTrait` to the model.
 ``` php
 use Laraditz\LaravelTree\TreeNodeTrait;
 
@@ -36,6 +37,8 @@ class Tree extends Model
     
 }
 ```
+
+## Usage
 
 Create node as root.
 ``` php
@@ -55,12 +58,6 @@ Tree::create([
 $tree->appendChild([
     'user_id' => 2
 ]);
-```
-
-### Testing
-
-``` bash
-composer test
 ```
 
 ### Changelog
@@ -83,7 +80,3 @@ If you discover any security related issues, please email raditzfarhan@gmail.com
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).

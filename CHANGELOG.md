@@ -2,6 +2,6 @@
 
 All notable changes to `laravel-tree` will be documented in this file
 
-## 1.0.0 - 201X-XX-XX
+## 0.0.1 - 2021-03-24
 
 - initial release
