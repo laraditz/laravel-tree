@@ -3,6 +3,7 @@
 namespace Laraditz\LaravelTree;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait TreeNodeTrait
 {
@@ -168,9 +169,9 @@ trait TreeNodeTrait
      *
      * @return $int
      */
-    public function getChildrenCountAttribute(): int
+    public function getChildCountAttribute(): int
     {
-        return $this->getChildrenCount();
+        return $this->getChildCount();
     }
 
     /**
@@ -178,9 +179,9 @@ trait TreeNodeTrait
      *
      * @return $int
      */
-    public function getDirectChildrenCountAttribute(): int
+    public function getDirectChildCountAttribute(): int
     {
-        return $this->getDirectChildrenCount();
+        return $this->getDirectChildCount();
     }
 
     /**
@@ -188,9 +189,9 @@ trait TreeNodeTrait
      *
      * @return boolean
      */
-    public function getHasChildrenAttribute(): bool
+    public function getHasChildAttribute(): bool
     {
-        return $this->getChildrenCount() ? true : false;
+        return $this->getChildCount() ? true : false;
     }
 
     /**
@@ -198,7 +199,7 @@ trait TreeNodeTrait
      *
      * @return $int
      */
-    public function getChildrenCount()
+    public function getChildCount()
     {
         return $this->where($this->getTreePathColumn(), 'LIKE', $this->{$this->getTreePathColumn()} . $this->getTreeDelimiter() . '%')->count();
     }
@@ -208,9 +209,32 @@ trait TreeNodeTrait
      *
      * @return $int
      */
-    public function getDirectChildrenCount()
+    public function getDirectChildCount()
     {
         return $this->where($this->getParentIdColumn(), $this->id)->count();
+    }
+
+    /**
+     * Check is current model is child or distinct child of parent
+     *
+     * @return boolean
+     */
+    public function isChildOf(self $parent): bool
+    {
+        if ($this->id === $parent->id) return false;
+
+        return Str::contains($this->{$this->getTreePathColumn()}, $parent->{$this->getTreePathColumn()});
+    }
+
+    /**
+     * Check is current model is from the same tree as node
+     *
+     * @return boolean
+     */
+    public function isSameTree(self $node): bool
+    {
+        return Str::contains($this->{$this->getTreePathColumn()}, $node->{$this->getTreePathColumn()})
+            || Str::contains($node->{$this->getTreePathColumn()}, $this->{$this->getTreePathColumn()});
     }
 
     /**
@@ -228,7 +252,7 @@ trait TreeNodeTrait
      *
      * @return Model
      */
-    public function childrens()
+    public function child()
     {
         return $this->hasMany(self::class, $this->getParentIdColumn(), 'id');
     }
