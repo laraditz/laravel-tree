@@ -113,6 +113,12 @@ trait TreeNodeTrait
         return $this;
     }
 
+    /**
+     * Create as root with null parent.
+     *     
+     *
+     * @return $this
+     */
     public function asRoot(): self
     {
         $this->fill([
@@ -126,6 +132,13 @@ trait TreeNodeTrait
         return $this;
     }
 
+    /**
+     * Append as child of current model.
+     * 
+     * @param array $items
+     *
+     * @return $this
+     */
     public function appendChild(array $items): self
     {
         $this->children()->updateOrCreate(Arr::add($items, $this->getParentIdColumn(), $this->id), []);
@@ -133,6 +146,13 @@ trait TreeNodeTrait
         return $this;
     }
 
+    /**
+     * Create as child of $parent
+     * 
+     * @param Model $parent
+     *
+     * @return $this
+     */
     public function asChildOf($parent)
     {
         $this->setParent($parent);
@@ -143,27 +163,72 @@ trait TreeNodeTrait
         return $this;
     }
 
-    public function getDownlineCountAttribute()
+    /**
+     * Get number of children  
+     *
+     * @return $int
+     */
+    public function getChildrenCountAttribute(): int
     {
-        return $this->getDownlineCount();
+        return $this->getChildrenCount();
     }
 
-    public function getDirectDownlineCount()
+    /**
+     * Get number of direct children  
+     *
+     * @return $int
+     */
+    public function getDirectChildrenCountAttribute(): int
     {
-        return $this->where($this->getParentIdColumn(), $this->id)->count();
+        return $this->getDirectChildrenCount();
     }
 
-    public function getDownlineCount()
+    /**
+     * Check childrent exists.
+     *
+     * @return boolean
+     */
+    public function getHasChildrenAttribute(): bool
+    {
+        return $this->getChildrenCount() ? true : false;
+    }
+
+    /**
+     * Count number of children  
+     *
+     * @return $int
+     */
+    public function getChildrenCount()
     {
         return $this->where($this->getTreePathColumn(), 'LIKE', $this->{$this->getTreePathColumn()} . $this->getTreeDelimiter() . '%')->count();
     }
 
+    /**
+     * Count number of direct children  
+     *
+     * @return $int
+     */
+    public function getDirectChildrenCount()
+    {
+        return $this->where($this->getParentIdColumn(), $this->id)->count();
+    }
+
+    /**
+     * Get parent through relationship
+     *
+     * @return Model
+     */
     public function parent()
     {
         return $this->belongsTo(self::class, $this->getParentIdColumn(), 'id');
     }
 
-    public function children()
+    /**
+     * Get children through relationship
+     *
+     * @return Model
+     */
+    public function childrens()
     {
         return $this->hasMany(self::class, $this->getParentIdColumn(), 'id');
     }
