@@ -60,6 +60,31 @@ $tree->appendChild([
 ]);
 ```
 
+## Available Relationships
+
+Below are all relationships under the `TreeNodeTrait`.
+| Relationship name         | Description  
+|---------------------------|---------------------------------|
+| parent()                  | Parent of current node. (1-1)
+| child()                   | Children of current node. (1-N)
+
+## Available Attributes
+
+Below are all attributes under the `TreeNodeTrait`.
+| Relationship name         | Description  
+|---------------------------|---------------------------------|
+| child_count               | Get number of children. 
+| direct_child_count        | Get number of cirect children.
+| has_child                 | Check if children exists.
+## Available Methods
+
+Below are all methods under the `TreeNodeTrait`.
+| Method name               | Description  
+|---------------------------|---------------------------------|
+| getChildCount()           | Count number of children.  
+| getDirectChildCount()     | Count number of cirect children.
+| isChildOf($node)          | Check is current node is child or distinct child of $node.
+| isSameTree($node)         | Check is current node is from the same tree as $node.
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.

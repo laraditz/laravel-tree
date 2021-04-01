@@ -185,7 +185,7 @@ trait TreeNodeTrait
     }
 
     /**
-     * Check childrent exists.
+     * Check children exists.
      *
      * @return boolean
      */
