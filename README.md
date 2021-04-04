@@ -71,7 +71,7 @@ Below are all relationships under the `TreeNodeTrait`.
 ## Available Attributes
 
 Below are all attributes under the `TreeNodeTrait`.
-| Relationship name         | Description  
+| Attribute name            | Description  
 |---------------------------|---------------------------------|
 | child_count               | Get number of children. 
 | direct_child_count        | Get number of cirect children.
