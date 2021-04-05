@@ -142,7 +142,7 @@ trait TreeNodeTrait
      */
     public function appendChild(array $items): self
     {
-        $this->children()->updateOrCreate(Arr::add($items, $this->getParentIdColumn(), $this->id), []);
+        $this->child()->updateOrCreate(Arr::add($items, $this->getParentIdColumn(), $this->id), []);
 
         return $this;
     }
