@@ -76,6 +76,8 @@ Below are all attributes under the `TreeNodeTrait`.
 | child_count               | Get number of children. 
 | direct_child_count        | Get number of cirect children.
 | has_child                 | Check if children exists.
+
+
 ## Available Methods
 
 Below are all methods under the `TreeNodeTrait`.
@@ -85,6 +87,10 @@ Below are all methods under the `TreeNodeTrait`.
 | getDirectChildCount()     | Count number of cirect children.
 | isChildOf($node)          | Check is current node is child or distinct child of $node.
 | isSameTree($node)         | Check is current node is from the same tree as $node.
+| moveNode($node)           | Move node to new parent $node.
+| isRootNode()              | Check if current node is a root node.
+| isSameNode($node)         | Compare two nodes is the same or not.
+
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
