@@ -3,7 +3,9 @@
 namespace Laraditz\LaravelTree;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use LogicException;
 
 trait TreeNodeTrait
 {
@@ -154,7 +156,7 @@ trait TreeNodeTrait
      *
      * @return $this
      */
-    public function asChildOf($parent)
+    public function asChildOf($parent): self
     {
         $this->setParent($parent);
         $this->save();
@@ -162,6 +164,58 @@ trait TreeNodeTrait
         $this->refresh();
 
         return $this;
+    }
+
+    /**
+     * Move Node to a new parent node.
+     * 
+     * @param $parent
+     *
+     * @return int|null
+     */
+    public function moveNode($parent): ?int
+    {
+        if ($parent->isChildOf($this)) {
+            throw new LogicException('Cannot move node to child node.');
+        }
+
+        if ($this->isSameNode($parent)) {
+            throw new LogicException('Cannot move to the same node.');
+        }
+
+        if ($this->isRootNode()) {
+            throw new LogicException('Cannot move root node.');
+        }
+
+        if ($parent->id == $this->parent_id) {
+            throw new LogicException('Nothing to do.');
+        }
+
+        $original_path = $this->{$this->getTreePathColumn()};
+        $new_path = $parent->{$this->getTreePathColumn()} . $this->getTreeDelimiter();
+        $replace_path = Str::beforeLast($original_path, $this->getTreeDelimiter() . $this->id) . $this->getTreeDelimiter();
+
+        $update = DB::transaction(
+            function () use ($parent, $original_path, $replace_path, $new_path) {
+
+                $new_path_value = preg_replace_array('/:[a-z_]+/', [$new_path, $this->getTreePathColumn(), $replace_path, $this->getTreePathColumn(), $replace_path], 'CONCAT(":new_path", substring(:col_name, locate(":replace_path", :col_name)+length(":replace_path")))');
+                $new_depth_value = $this->getDepthColumn() . ' - ' . (count(explode($this->getTreeDelimiter(), $replace_path)) - 1) . ' + ' . $parent->{$this->getDepthColumn()};
+
+                $update = self::where($this->getTreePathColumn(), 'LIKE', $original_path . "%")
+                    ->update([
+                        // $this->getTreePathColumn() => DB::raw("REPLACE(" . $this->getTreePathColumn() . ", '" . $replace_path . "', '" . $new_path . "')"), // replace everything matches not just the first occurance
+                        $this->getTreePathColumn() => DB::raw($new_path_value),
+                        $this->getDepthColumn() => DB::raw($new_depth_value),
+                    ]);
+
+                $this->{$this->getParentIdColumn()} = $parent->id;
+                $this->save();
+
+                return $update;
+            }
+        );
+
+        return $update;
     }
 
     /**
@@ -209,7 +263,7 @@ trait TreeNodeTrait
      *
      * @return $int
      */
-    public function getDirectChildCount()
+    public function getDirectChildCount(): int
     {
         return $this->where($this->getParentIdColumn(), $this->id)->count();
     }
@@ -235,6 +289,26 @@ trait TreeNodeTrait
     {
         return Str::contains($this->{$this->getTreePathColumn()}, $node->{$this->getTreePathColumn()})
             || Str::contains($node->{$this->getTreePathColumn()}, $this->{$this->getTreePathColumn()});
+    }
+
+    /**
+     * Check if current node is a root node
+     *
+     * @return boolean
+     */
+    public function isRootNode(): bool
+    {
+        return $this->{$this->getParentIdColumn()} === null && $this->{$this->getDepthColumn()} === 1;
+    }
+
+    /**
+     * Check if current node is same as given node
+     *
+     * @return boolean
+     */
+    public function isSameNode(self $node): bool
+    {
+        return $this->id === $node->id;
     }
 
     /**
