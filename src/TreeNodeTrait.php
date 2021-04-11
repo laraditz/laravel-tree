@@ -269,6 +269,30 @@ trait TreeNodeTrait
     }
 
     /**
+     * Return parent ids from bottom-up
+     *
+     * @return array|null
+     */
+    public function getParentIds(int $level = 1): ?array
+    {
+        $tree_path = $this->{$this->getTreePathColumn()};
+        if (!$tree_path) return null;
+
+        $collection = collect(explode($this->getTreeDelimiter(), $tree_path));
+        $collection->pop(); // remove self
+
+        if ($collection->count() <= 0) return null;
+
+        $reversed = $collection->reverse()->values(); // bottom-up
+
+        $filtered = $reversed->reject(function ($value, $key) use ($level) {
+            return $key >= $level;
+        });
+
+        return $filtered->all();
+    }
+
+    /**
      * Check is current model is child or distinct child of parent
      *
      * @return boolean
