@@ -85,9 +85,10 @@ Below are all methods under the `TreeNodeTrait`.
 |---------------------------|---------------------------------|
 | getChildCount()           | Count number of children.  
 | getDirectChildCount()     | Count number of cirect children.
+| getParentIds()            | Get parent ids from bottom-up.
+| moveNode($node)           | Move node to new parent $node.
 | isChildOf($node)          | Check is current node is child or distinct child of $node.
 | isSameTree($node)         | Check is current node is from the same tree as $node.
-| moveNode($node)           | Move node to new parent $node.
 | isRootNode()              | Check if current node is a root node.
 | isSameNode($node)         | Compare two nodes is the same or not.
 
