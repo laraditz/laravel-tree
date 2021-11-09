@@ -84,6 +84,7 @@ Below are all methods under the `TreeNodeTrait`.
 | Method name               | Description  
 |---------------------------|---------------------------------|
 | getChildCount()           | Count number of children.  
+| getChildCount(int $level) | Count number of children based on level.  
 | getDirectChildCount()     | Count number of cirect children.
 | getParentIds()            | Get parent ids from bottom-up.
 | moveNode($node)           | Move node to new parent $node.

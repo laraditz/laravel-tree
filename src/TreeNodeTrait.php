@@ -253,9 +253,15 @@ trait TreeNodeTrait
      *
      * @return $int
      */
-    public function getChildCount()
+    public function getChildCount(int $level = 0)
     {
-        return $this->where($this->getTreePathColumn(), 'LIKE', $this->{$this->getTreePathColumn()} . $this->getTreeDelimiter() . '%')->count();
+        $query = $this->where($this->getTreePathColumn(), 'LIKE', $this->{$this->getTreePathColumn()} . $this->getTreeDelimiter() . '%');
+
+        if ($level > 0) {
+            $query->where($this->getDepthColumn(), $this->{$this->getDepthColumn()} + $level);
+        }
+
+        return $query->count();
     }
 
     /**
