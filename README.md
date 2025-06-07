@@ -19,7 +19,8 @@ composer require laraditz/laravel-tree
 
 Add the tree columns to your table by adding `addLaravelTreeColumns` to your database migration file.
 For example, we add the tree columns to the `trees` table as shown below.
-``` php
+
+```php
  Schema::create('trees', function (Blueprint $table) {
     ...
     $table->addLaravelTreeColumns();
@@ -27,28 +28,31 @@ For example, we add the tree columns to the `trees` table as shown below.
 });
 ```
 
-Then, add the `TreeNodeTrait` to the model.
-``` php
-use Laraditz\LaravelTree\TreeNodeTrait;
+Then, add the `HasTreeNode` to the model.
+
+```php
+use Laraditz\LaravelTree\HasTreeNode;
 
 class Tree extends Model
 {
-    use TreeNodeTrait;
-    
+    use HasTreeNode;
+
 }
 ```
 
 ## Usage
 
 Create node as root.
-``` php
+
+```php
 Tree::create([
     'user_id' => 1
 ])->asRoot()
 ```
 
 Create node as child.
-``` php
+
+```php
 // $tree is the parent object
 Tree::create([
     'user_id' => 2
@@ -63,35 +67,34 @@ $tree->appendChild([
 ## Available Relationships
 
 Below are all relationships under the `TreeNodeTrait`.
-| Relationship name         | Description  
+| Relationship name | Description  
 |---------------------------|---------------------------------|
-| parent()                  | Parent of current node. (1-1)
-| child()                   | Children of current node. (1-N)
+| parent() | Parent of current node. (1-1)
+| child() | Children of current node. (1-N)
 
 ## Available Attributes
 
 Below are all attributes under the `TreeNodeTrait`.
-| Attribute name            | Description  
+| Attribute name | Description  
 |---------------------------|---------------------------------|
-| child_count               | Get number of children. 
-| direct_child_count        | Get number of cirect children.
-| has_child                 | Check if children exists.
-
+| child_count | Get number of children.
+| direct_child_count | Get number of cirect children.
+| has_child | Check if children exists.
 
 ## Available Methods
 
 Below are all methods under the `TreeNodeTrait`.
-| Method name               | Description  
+| Method name | Description  
 |---------------------------|---------------------------------|
-| getChildCount()           | Count number of children.  
+| getChildCount() | Count number of children.  
 | getChildCount(int $level) | Count number of children based on level.  
 | getDirectChildCount()     | Count number of cirect children.
 | getParentIds()            | Get parent ids from bottom-up.
-| moveNode($node)           | Move node to new parent $node.
-| isChildOf($node)          | Check is current node is child or distinct child of $node.
-| isSameTree($node)         | Check is current node is from the same tree as $node.
+| moveNode($node) | Move node to new parent $node.
+| isChildOf($node) | Check is current node is child or distinct child of $node.
+| isSameTree($node) | Check is current node is from the same tree as $node.
 | isRootNode()              | Check if current node is a root node.
-| isSameNode($node)         | Compare two nodes is the same or not.
+| isSameNode($node) | Compare two nodes is the same or not.
 
 ### Changelog
 
@@ -107,8 +110,8 @@ If you discover any security related issues, please email raditzfarhan@gmail.com
 
 ## Credits
 
-- [Raditz Farhan](https://github.com/laraditz)
-- [All Contributors](../../contributors)
+-   [Raditz Farhan](https://github.com/laraditz)
+-   [All Contributors](../../contributors)
 
 ## License
 
