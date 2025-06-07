@@ -66,7 +66,7 @@ $tree->appendChild([
 
 ## Available Relationships
 
-Below are all relationships under the `TreeNodeTrait`.
+Below are all relationships under the `HasTreeNode`.
 | Relationship name | Description  
 |---------------------------|---------------------------------|
 | parent() | Parent of current node. (1-1)
@@ -74,7 +74,7 @@ Below are all relationships under the `TreeNodeTrait`.
 
 ## Available Attributes
 
-Below are all attributes under the `TreeNodeTrait`.
+Below are all attributes under the `HasTreeNode`.
 | Attribute name | Description  
 |---------------------------|---------------------------------|
 | child_count | Get number of children.
@@ -83,7 +83,7 @@ Below are all attributes under the `TreeNodeTrait`.
 
 ## Available Methods
 
-Below are all methods under the `TreeNodeTrait`.
+Below are all methods under the `HasTreeNode`.
 | Method name | Description  
 |---------------------------|---------------------------------|
 | getChildCount() | Count number of children.  
