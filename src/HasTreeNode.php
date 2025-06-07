@@ -2,12 +2,12 @@
 
 namespace Laraditz\LaravelTree;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use LogicException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
-trait TreeNodeTrait
+trait HasTreeNode
 {
     /**
      * Get the parent id column name.
@@ -118,7 +118,7 @@ trait TreeNodeTrait
 
     /**
      * Create as root with null parent.
-     *     
+     *
      *
      * @return $this
      */
@@ -137,7 +137,7 @@ trait TreeNodeTrait
 
     /**
      * Append as child of current model.
-     * 
+     *
      * @param array $items
      *
      * @return $this
@@ -151,7 +151,7 @@ trait TreeNodeTrait
 
     /**
      * Create as child of $parent
-     * 
+     *
      * @param Model $parent
      *
      * @return $this
@@ -168,7 +168,7 @@ trait TreeNodeTrait
 
     /**
      * Move Node to a new parent node.
-     * 
+     *
      * @param $parent
      *
      * @return int|null
@@ -219,7 +219,7 @@ trait TreeNodeTrait
     }
 
     /**
-     * Get number of children  
+     * Get number of children
      *
      * @return $int
      */
@@ -229,7 +229,7 @@ trait TreeNodeTrait
     }
 
     /**
-     * Get number of direct children  
+     * Get number of direct children
      *
      * @return $int
      */
@@ -249,7 +249,7 @@ trait TreeNodeTrait
     }
 
     /**
-     * Count number of children  
+     * Count number of children
      *
      * @return $int
      */
@@ -265,7 +265,7 @@ trait TreeNodeTrait
     }
 
     /**
-     * Count number of direct children  
+     * Count number of direct children
      *
      * @return $int
      */
@@ -282,12 +282,14 @@ trait TreeNodeTrait
     public function getParentIds(int $level = 1): ?array
     {
         $tree_path = $this->{$this->getTreePathColumn()};
-        if (!$tree_path) return null;
+        if (!$tree_path)
+            return null;
 
         $collection = collect(explode($this->getTreeDelimiter(), $tree_path));
         $collection->pop(); // remove self
 
-        if ($collection->count() <= 0) return null;
+        if ($collection->count() <= 0)
+            return null;
 
         $reversed = $collection->reverse()->values(); // bottom-up
 
@@ -305,7 +307,8 @@ trait TreeNodeTrait
      */
     public function isChildOf(self $parent): bool
     {
-        if ($this->id === $parent->id) return false;
+        if ($this->id === $parent->id)
+            return false;
 
         return Str::contains($this->{$this->getTreePathColumn()}, $parent->{$this->getTreePathColumn()});
     }
